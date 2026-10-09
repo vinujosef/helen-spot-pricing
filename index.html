@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#f6f8fc">
+<title>PowerPrice Helen</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="app">
+  <div class="topbar">
+    <div class="brand" id="dayTitle">Today</div>
+    <div class="tabs">
+      <button class="tab active" id="todayBtn">Today</button>
+      <button class="tab" id="tomorrowBtn" disabled>Tomorrow</button>
+    </div>
+  </div>
+
+  <section class="hero">
+    <div class="price-wrap">
+      <div class="price" id="currentPrice">—</div>
+      <div class="unit">c/kWh</div>
+    </div>
+    <div class="interval" id="currentInterval"><strong>Loading prices…</strong>Finland · 15 min</div>
+  </section>
+
+  <section class="chart-card">
+    <div class="chart-head">
+      <div class="chart-title" id="chartTitle">Today’s price</div>
+      <div class="chart-note" id="chartNote">Spot price incl. VAT · c/kWh</div>
+    </div>
+    <svg class="chart" id="chart" role="img" aria-label="Electricity price graph"></svg>
+  </section>
+
+  <section class="stats">
+    <div class="stat">
+      <div class="icon">↓</div>
+      <div>
+        <div class="label" id="lowLabel">Next lowest</div>
+        <div class="value" id="lowValue">—</div>
+        <div class="sub" id="lowTime">—</div>
+      </div>
+    </div>
+    <div class="stat">
+      <div class="icon">★</div>
+      <div>
+        <div class="label" id="hourLabel">Best remaining 1 hour</div>
+        <div class="value" id="hourValue">—</div>
+        <div class="sub" id="hourTime">—</div>
+      </div>
+    </div>
+  </section>
+</div>
+<div class="status" id="status">Starting…</div>
+<div class="footer">Spot data: spot-hinta.fi · Finland · 15 min · incl. VAT</div>
+
+<script src="js/app.js"></script>
+</body>
+</html>
