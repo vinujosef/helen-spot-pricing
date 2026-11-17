@@ -271,9 +271,10 @@
       }
       var nowMinute=now.getHours()*60+now.getMinutes()+now.getSeconds()/60;
       nowX=xMinute(Math.max(0,Math.min(1440,nowMinute)));
-      // Fade everything already passed while leaving future prices strong.
-      if(nowX>m.l) out.push('<rect class="past-fade" x="'+m.l+'" y="'+m.t+'" width="'+(nowX-m.l)+'" height="'+ch+'"/>');
     }
+
+    // Fade past prices while leaving the hour-window markers above them.
+    if(isToday&&nowX>m.l) out.push('<rect class="past-fade" x="'+m.l+'" y="'+m.t+'" width="'+(nowX-m.l)+'" height="'+ch+'"/>');
 
     // Show the cheapest and most expensive one-hour windows of the displayed day.
     var bestDay=hourExtreme(rows,false), worstDay=hourExtreme(rows,true);
@@ -284,9 +285,10 @@
       var x2=xMinute(Math.min(1440,minuteOfDay(item.start)+duration));
       var cls=kind==='best'?'hour-best':'hour-worst';
       var tcls=kind==='best'?'band-label band-label-best':'band-label band-label-worst';
-      out.push('<rect class="'+cls+'" x="'+x1+'" y="'+m.t+'" width="'+Math.max(3,x2-x1)+'" height="'+ch+'"/>');
+      var opacity=isToday&&x2<=nowX?'.6':'1';
+      out.push('<rect class="'+cls+'" x="'+x1+'" y="'+m.t+'" width="'+Math.max(3,x2-x1)+'" height="'+ch+'" opacity="'+opacity+'"/>');
       var tx=(x1+x2)/2;
-      out.push('<text class="'+tcls+'" x="'+tx+'" y="'+(m.t+13)+'" text-anchor="middle">'+label+'</text>');
+      out.push('<text class="'+tcls+'" x="'+tx+'" y="'+(m.t+13)+'" text-anchor="middle" opacity="'+opacity+'">'+label+'</text>');
     }
     drawHourBand(bestDay,'best','BEST 1H');
     drawHourBand(worstDay,'worst','WORST 1H');
