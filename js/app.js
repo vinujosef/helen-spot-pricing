@@ -294,12 +294,13 @@
     drawHourBand(worstDay,'worst','WORST 1H');
 
     if(isToday&&nowIdx>=0){
-      var badgeWidth=92,badgeX=nowX>W-m.r-badgeWidth-12?nowX-badgeWidth-8:nowX+8,badgeY=m.t+6;
+      var badgeWidth=152,badgeX=nowX>W-m.r-badgeWidth-12?nowX-badgeWidth-8:nowX+8,badgeY=m.t+6;
       out.push('<line class="now-line-halo" x1="'+nowX+'" y1="'+m.t+'" x2="'+nowX+'" y2="'+(H-m.b)+'" stroke="#fff" stroke-width="5"/>');
       out.push('<line class="now-line" x1="'+nowX+'" y1="'+m.t+'" x2="'+nowX+'" y2="'+(H-m.b)+'" stroke="#1769e0" stroke-width="2.5"/>');
       out.push('<polygon class="now-marker" points="'+(nowX-5)+','+m.t+' '+(nowX+5)+','+m.t+' '+nowX+','+(m.t+7)+'" fill="#1769e0"/>');
-      out.push('<rect class="now-label-bg" x="'+badgeX+'" y="'+badgeY+'" width="'+badgeWidth+'" height="20" rx="5" fill="#1769e0"/>');
-      out.push('<text class="now-label" id="nowLabel" x="'+(badgeX+8)+'" y="'+(badgeY+14)+'" fill="#fff" font-size="10" font-weight="800">NOW '+fmtTime(now)+'</text>');
+      out.push('<rect class="now-label-bg" x="'+badgeX+'" y="'+badgeY+'" width="'+badgeWidth+'" height="36" rx="5" fill="#1769e0"/>');
+      out.push('<text class="now-label" x="'+(badgeX+8)+'" y="'+(badgeY+13)+'" fill="#fff" font-size="10" font-weight="800">NOW</text>');
+      out.push('<text class="now-detail" x="'+(badgeX+8)+'" y="'+(badgeY+28)+'" fill="#fff" font-size="10" font-weight="700">'+fmtTime(now)+' — '+priceText(rows[nowIdx].price)+' c/kWh</text>');
       out.push('<circle class="now-dot" cx="'+nowX+'" cy="'+y(rows[nowIdx].price)+'" r="5" fill="#1769e0" stroke="#fff" stroke-width="2.5"/>');
 
       var rem=futureRows(rows,now,false),lo=minimum(rem);
