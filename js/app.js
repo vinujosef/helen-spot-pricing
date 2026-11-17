@@ -3,7 +3,7 @@
   var API_PRIMARY='https://api.spot-hinta.fi/TodayAndDayForward?region=FI&priceResolution=15';
   var API_FALLBACK='https://public-data.volton.energy/v1/day-ahead-spot-fi/latest.json';
   var CACHE='powerprice-fi-cache-v7';
-  var state={rows:[],selected:'today',lastUpdate:null,lastSlotKey:null,inspectLocked:false,lastTomorrowCheck:0};
+  var state={rows:[],selected:'today',lastUpdate:null,lastChartMinuteKey:null,inspectLocked:false,lastTomorrowCheck:0};
   var $=function(id){return document.getElementById(id)};
 
   function pad(n){return n<10?'0'+n:String(n)}
@@ -13,7 +13,7 @@
   function fmtDate(d){var days=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];return days[d.getDay()]+' '+d.getDate()+'.'+(d.getMonth()+1)+'.'}
   function fmtClock(d){return pad(d.getHours())+':'+pad(d.getMinutes())+':'+pad(d.getSeconds())}
   function selectedDate(){var d=new Date();if(state.selected==='tomorrow')d.setDate(d.getDate()+1);return d}
-  function updateClock(){var now=new Date();$('dayTitle').textContent=fmtDate(now)+'   '+fmtClock(now);var key=localDateKey(now)+'-'+now.getHours()+'-'+Math.floor(now.getMinutes()/15);if(state.lastSlotKey!==key){state.lastSlotKey=key;if(state.rows.length)render()}}
+  function updateClock(){var now=new Date();$('dayTitle').textContent=fmtDate(now)+'   '+fmtClock(now);var key=localDateKey(now)+'-'+now.getHours()+'-'+now.getMinutes();if(state.lastChartMinuteKey!==key){state.lastChartMinuteKey=key;if(state.rows.length)render()}}
   function priceText(v){if(v===null||!isFinite(v))return '—';return (Math.round(v*100)/100).toFixed(2)}
   function endOfSlot(d){return new Date(d.getTime()+15*60000)}
 
@@ -292,12 +292,13 @@
     drawHourBand(worstDay,'worst','WORST 1H');
 
     if(isToday&&nowIdx>=0){
-      var blockStart=xRow(rows[nowIdx]);
-      var blockEnd=xMinute(Math.min(1440,minuteOfDay(rows[nowIdx].start)+15));
-      out.push('<rect class="now-band" x="'+blockStart+'" y="'+m.t+'" width="'+Math.max(3,blockEnd-blockStart)+'" height="'+ch+'" rx="2"/>');
-      out.push('<line class="now-line" x1="'+nowX+'" y1="'+m.t+'" x2="'+nowX+'" y2="'+(H-m.b)+'"/>');
-      out.push('<text class="axis-strong" x="'+Math.min(nowX+6,W-m.r-30)+'" y="'+(m.t+27)+'">NOW</text>');
-      out.push('<circle class="now-dot" cx="'+xRow(rows[nowIdx])+'" cy="'+y(rows[nowIdx].price)+'" r="5"/>');
+      var badgeWidth=92,badgeX=nowX>W-m.r-badgeWidth-12?nowX-badgeWidth-8:nowX+8,badgeY=m.t+6;
+      out.push('<line class="now-line-halo" x1="'+nowX+'" y1="'+m.t+'" x2="'+nowX+'" y2="'+(H-m.b)+'" stroke="#fff" stroke-width="5"/>');
+      out.push('<line class="now-line" x1="'+nowX+'" y1="'+m.t+'" x2="'+nowX+'" y2="'+(H-m.b)+'" stroke="#1769e0" stroke-width="2.5"/>');
+      out.push('<polygon class="now-marker" points="'+(nowX-5)+','+m.t+' '+(nowX+5)+','+m.t+' '+nowX+','+(m.t+7)+'" fill="#1769e0"/>');
+      out.push('<rect class="now-label-bg" x="'+badgeX+'" y="'+badgeY+'" width="'+badgeWidth+'" height="20" rx="5" fill="#1769e0"/>');
+      out.push('<text class="now-label" id="nowLabel" x="'+(badgeX+8)+'" y="'+(badgeY+14)+'" fill="#fff" font-size="10" font-weight="800">NOW '+fmtTime(now)+'</text>');
+      out.push('<circle class="now-dot" cx="'+nowX+'" cy="'+y(rows[nowIdx].price)+'" r="5" fill="#1769e0" stroke="#fff" stroke-width="2.5"/>');
 
       var rem=futureRows(rows,now,false),lo=minimum(rem);
       if(lo)out.push('<circle class="low-dot" cx="'+xRow(lo)+'" cy="'+y(lo.price)+'" r="5"/>');
