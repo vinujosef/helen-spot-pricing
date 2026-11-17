@@ -16,36 +16,19 @@ A lightweight, always-on Finland electricity price dashboard designed for an old
 - Tomorrow button automatically becomes available after tomorrow's prices are published; the app starts checking every 5 minutes after 14:20
 - Live clock with running seconds
 
-## Project structure
-
-```text
-powerprice-helen/
-├── index.html
-├── css/
-│   └── style.css
-├── js/
-│   └── app.js
-├── README.md
-└── .gitignore
-```
 
 ## Run locally
 
-On macOS, run `./test-locally.sh` from the project directory to start the server and open the dashboard in your browser. Keep the terminal window open while using it; press Ctrl+C there to stop the server.
+On macOS, copy `.env.example` to `.env`.
 
-Or start it from the project directory:
+Adjust the host or port if needed, then run `./test-locally.sh` from the project directory to start the server and open the dashboard in your browser. 
 
-```bash
-python3 -m http.server 8090 --bind 127.0.0.1
+
+```
+The script builds the browser URL from `HOST` and `PORT`.
 ```
 
-Open:
-
-```text
-http://127.0.0.1:8090
-```
-
-## Ubuntu server deployment
+## Server deployment
 
 Suggested location:
 
@@ -63,8 +46,8 @@ After=network.target
 [Service]
 Type=simple
 User=YOUR_USERNAME
-WorkingDirectory=/opt/apps/services/powerprice-helen
-ExecStart=/usr/bin/python3 -m http.server 8090 --bind 0.0.0.0
+WorkingDirectory=/opt/apps/services/helen-spot-price
+ExecStart=/usr/bin/python3 -m http.server <port> --bind 0.0.0.0
 Restart=always
 RestartSec=5
 

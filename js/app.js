@@ -280,7 +280,8 @@
     function drawHourBand(item,kind,label){
       if(!item)return;
       var x1=xMinute(minuteOfDay(item.start));
-      var x2=xMinute(Math.min(1440,minuteOfDay(item.end)));
+      var duration=(item.end-item.start)/60000;
+      var x2=xMinute(Math.min(1440,minuteOfDay(item.start)+duration));
       var cls=kind==='best'?'hour-best':'hour-worst';
       var tcls=kind==='best'?'band-label band-label-best':'band-label band-label-worst';
       out.push('<rect class="'+cls+'" x="'+x1+'" y="'+m.t+'" width="'+Math.max(3,x2-x1)+'" height="'+ch+'"/>');

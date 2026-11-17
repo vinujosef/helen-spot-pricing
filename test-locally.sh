@@ -3,10 +3,18 @@ set -eu
 
 cd "$(dirname "$0")"
 
-PORT=8090
-URL="http://127.0.0.1:$PORT"
+if [ ! -f .env ]; then
+  echo "Missing .env; copy .env.example to .env and set the server configuration." >&2
+  exit 1
+fi
 
-python3 -m http.server "$PORT" --bind 127.0.0.1 &
+. ./.env
+
+: "${HOST:?Set HOST in .env}"
+: "${PORT:?Set PORT in .env}"
+URL="http://$HOST:$PORT"
+
+python3 -m http.server "$PORT" --bind "$HOST" &
 SERVER_PID=$!
 trap 'kill "$SERVER_PID" 2>/dev/null || true' EXIT INT TERM
 
